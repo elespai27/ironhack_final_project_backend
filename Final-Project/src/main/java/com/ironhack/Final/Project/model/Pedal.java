@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+
 public class Pedal {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pedalId;
 
     private String pedalName;
@@ -28,4 +29,11 @@ public class Pedal {
     @JsonBackReference("pedalboard-pedals")
     private PedalBoard pedalBoard;
 
+    public Pedal(String pedalName, PedalType pedalType, Boolean pedalBypass, String pedalParameters, PedalBoard pedalBoard) {
+        this.pedalName = pedalName;
+        this.pedalType = pedalType;
+        this.pedalBypass = pedalBypass;
+        this.pedalParameters = pedalParameters;
+        this.pedalBoard = pedalBoard;
+    }
 }

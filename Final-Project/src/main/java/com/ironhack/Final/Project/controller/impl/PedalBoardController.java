@@ -1,5 +1,6 @@
 package com.ironhack.Final.Project.controller.impl;
 
+import com.ironhack.Final.Project.controller.dto.PedalBoardDTO;
 import com.ironhack.Final.Project.model.PedalBoard;
 import com.ironhack.Final.Project.service.interfaces.IPedalBoardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,9 @@ public class PedalBoardController {
 //Create
 @PostMapping("/pedalboards")
 @ResponseStatus(HttpStatus.CREATED)
-public PedalBoard createPedalBoard(@RequestBody PedalBoard pedalBoard) {
-    return pedalBoardService.createPedalBoard(pedalBoard);
+public PedalBoard createPedalBoard(@RequestBody PedalBoardDTO pedalBoardDTO) {
+    return pedalBoardService.createPedalBoard(pedalBoardDTO);
 }
-
 
 //Read
     @GetMapping("/pedalboards")

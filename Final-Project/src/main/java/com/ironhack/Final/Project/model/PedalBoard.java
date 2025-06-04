@@ -13,11 +13,13 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
+
 @Data
 public class PedalBoard {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pedalBoardId;
+
     private String pedalBoardName;
 
 
@@ -31,4 +33,9 @@ public class PedalBoard {
     @JsonManagedReference("pedalboard-pedals")
     private List<Pedal> pedals = new ArrayList<>();
 
+    public PedalBoard(String pedalBoardName, User user, List<Pedal> pedals) {
+        this.pedalBoardName = pedalBoardName;
+        this.user = user;
+        this.pedals = pedals;
+    }
 }

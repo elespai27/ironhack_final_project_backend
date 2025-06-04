@@ -1,5 +1,6 @@
 package com.ironhack.Final.Project.controller.impl;
 
+import com.ironhack.Final.Project.controller.dto.PedalDTO;
 import com.ironhack.Final.Project.model.Pedal;
 import com.ironhack.Final.Project.model.PedalType;
 import com.ironhack.Final.Project.service.interfaces.IPedalService;
@@ -18,8 +19,8 @@ public class PedalController {
 
     @PostMapping("/pedals")
     @ResponseStatus(HttpStatus.CREATED)
-    public Pedal createPedal(@RequestBody Pedal pedal) {
-        return pedalService.createPedal(pedal);
+    public Pedal createPedal(@RequestBody PedalDTO pedalDTO) {
+        return pedalService.createPedal(pedalDTO);
     }
 
     @GetMapping("/pedalboards/{pedalBoardId}/pedals")

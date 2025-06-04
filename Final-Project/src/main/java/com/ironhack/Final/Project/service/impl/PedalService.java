@@ -1,6 +1,8 @@
 package com.ironhack.Final.Project.service.impl;
 
+import com.ironhack.Final.Project.controller.dto.PedalDTO;
 import com.ironhack.Final.Project.model.Pedal;
+import com.ironhack.Final.Project.model.PedalBoard;
 import com.ironhack.Final.Project.model.PedalType;
 import com.ironhack.Final.Project.repository.PedalBoardRepository;
 import com.ironhack.Final.Project.repository.PedalRepository;
@@ -21,23 +23,17 @@ public class PedalService implements IPedalService {
     private PedalBoardRepository pedalBoardRepository;
 
     @Override
-    public Pedal createPedal(Pedal pedal) {
-
-        // Validate that the pedalboard exists and has ID
-        if (pedal.getPedalBoard() == null || pedal.getPedalBoard().getPedalBoardId() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "PedalBoard must be specified and have a valid ID");
-        }
-        // Validate that there is no longer a pedal with the same name on the same pedalboard (optional but recommended)
-        boolean exists = pedalRepository
-                .findByPedalBoard_PedalBoardId(pedal.getPedalBoard().getPedalBoardId())
-                .stream()
-                .anyMatch(p -> p.getPedalName().equalsIgnoreCase(pedal.getPedalName()));
-
-        if (exists) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "A pedal with that name already exists in this pedalboard");
-        }
-
+    public Pedal createPedal(PedalDTO dto) {
+        PedalBoard pedalBoard = pedalBoardRepository.findById(dto.getPedalBoardId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedalboard not found"));
+        Pedal pedal = new Pedal();
+        pedal.setPedalName(dto.getPedalName());
+        pedal.setPedalType(dto.getPedalType());
+        pedal.setPedalBypass(dto.getPedalBypass());
+        pedal.setPedalParameters(dto.getPedalParameters());
+        pedal.setPedalBoard(pedalBoard);
         return pedalRepository.save(pedal);
+
     }
 
     @Override

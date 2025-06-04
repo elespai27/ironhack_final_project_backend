@@ -1,8 +1,10 @@
 package com.ironhack.Final.Project.service.impl;
 
-import com.ironhack.Final.Project.model.Pedal;
+import com.ironhack.Final.Project.controller.dto.PedalBoardDTO;
 import com.ironhack.Final.Project.model.PedalBoard;
+import com.ironhack.Final.Project.model.User;
 import com.ironhack.Final.Project.repository.PedalBoardRepository;
+import com.ironhack.Final.Project.repository.UserRepository;
 import com.ironhack.Final.Project.service.interfaces.IPedalBoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,21 +20,20 @@ public class PedalBoardService implements IPedalBoardService {
     @Autowired
     PedalBoardRepository pedalBoardRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+
     @Override
-    public PedalBoard createPedalBoard(PedalBoard pedalBoard) {
-        if (pedalBoardRepository.findByPedalBoardName(pedalBoard.getPedalBoardName()).isPresent()){
-            throw new IllegalArgumentException("The PedalBoard already exists");
-        }
-
-        // Assign the pedalBoard reference to each pedal before saving
-        if (pedalBoard.getPedals() != null) {
-            for (Pedal pedal : pedalBoard.getPedals()) {
-                pedal.setPedalBoard(pedalBoard);
-            }
-        }
-
+    public PedalBoard createPedalBoard(PedalBoardDTO dto) {
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        PedalBoard pedalBoard = new PedalBoard();
+        pedalBoard.setPedalBoardName(dto.getPedalBoardName());
+        pedalBoard.setUser(user);
         return pedalBoardRepository.save(pedalBoard);
-    }
+        }
+
 
     @Override
     public List<PedalBoard> getAllPedalboards() {
